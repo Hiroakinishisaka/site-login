@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Área Restrita</title>
+
+<style>
+body {
+  background: black;
+  color: white;
+  text-align: center;
+  margin-top: 100px;
+}
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+}
+button {
+  padding: 10px;
+}
+#videoArea {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginArea">
+  <h2>🔒 Área Restrita</h2>
+
+  <input id="user" placeholder="Usuário">
+  <input id="pass" type="password" placeholder="Senha">
+
+  <button onclick="login()">Entrar</button>
+
+  <p id="msg" style="color:red;"></p>
+</div>
+
+<div id="videoArea">
+  <h2>Acesso liberado 😏</h2>
+
+  <video width="500" controls>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<script>
+async function login() {
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
+
+  const res = await fetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      usuario: user,
+      senha: pass
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.status === "erro") {
+    document.getElementById("msg").innerText = "Login inválido!";
+  } else {
+    document.getElementById("loginArea").style.display = "none";
+    document.getElementById("videoArea").style.display = "block";
+  }
+}
+</script>
+
+</body>
+</html>
